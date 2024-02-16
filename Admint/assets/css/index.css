@@ -1,0 +1,11 @@
+#img_box{
+    background-color: red;
+    width: 70px;
+    height: 70px;
+    position: relative;
+}
+#img_box1{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
