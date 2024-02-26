@@ -329,7 +329,7 @@
                               <h6 class="fw-semibold mb-0">
                                 <?php echo $index; ?>
                               </h6>
-                              <p>
+                              <p hidden>
                                 <?php echo $row[0]; ?>
                               </p>
                             </td>
@@ -341,8 +341,9 @@
                             <td class="border-bottom-0">
                               <?php echo $row[2]; ?>
                             </td>
-                            <td class="border-bottom-0">
+                            <td style="width: 10%;" class="border-bottom-0">
                               <button id="edit" type="button" class="btn btn-primary m-1"><i class="fa-solid fa-file-pen"></i> Edit</button>
+                              <button id="ask_delete" type="button" class="btn btn-danger m-1"><i class="fa-solid fa-trash"></i> Delete</button>
                             </td>
                           </tr>
                         <?php
@@ -450,7 +451,26 @@
       </div>
     </div>
     <!-- end -->
-    <div id="output"></div>
+    <!-- ask delete  -->
+
+    <div class="modal fade" id="delete_ask" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Message</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Do you want delete this record [ <span id="body_del"></span> ]?
+          </div>
+          <div class="modal-footer" style="justify-content: center;">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+            <button type="button" id="yes_delete" class="btn btn-primary" data-bs-dismiss="modal">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end  -->
 
   </div>
   <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
@@ -464,6 +484,8 @@
       var mes = $('#message');
       var update_logo = $('#update_img').hide();
       var save_logo = $('#save_img');
+      var trInd = 0;
+      // open submenu
       $('#subMenu').click(function() {
         $('#sub_menu').modal('show');
       });
@@ -498,7 +520,6 @@
         var Parent = eThis.parents('.upl');
         var status1 = Parent.find('#logo_opt');
         var image = Parent.find('#txt_photo');
-        // console.log(status1.val());
         var frm = eThis.closest('form.upl');
         var frm_data = new FormData(frm[0]);
         $.ajax({
@@ -512,15 +533,15 @@
           beforeSend: function() {
             //work before success   
           },
-          success: function(data) { 
+          success: function(data) {
             // get auto data
-            var tr =`
+            var tr = `
               <tr>
                 <td class="border-bottom-0">
                   <h6 class="fw-semibold mb-0">
-                  <?php echo ($index-$index)+1; ?>
+                  <?php echo ($index - $index) + 1; ?>
                   </h6>
-                  <p>
+                  <p hidden>
                   ${data.id}
                   </p>
                 </td>
@@ -534,6 +555,7 @@
                 </td>
                 <td class="border-bottom-0">
                   <button id="edit" type="button" class="btn btn-primary m-1"><i class="fa-solid fa-file-pen"></i> Edit</button>
+                  <button id="ask_delete" type="button" class="btn btn-danger m-1"><i class="fa-solid fa-trash"></i> Delete</button>
                 </td>
               </tr>`;
             //work after success     
@@ -541,7 +563,7 @@
               "background-image": "url('../assets/images/backgrounds/icon-img_upload.png')"
             });
             $("div#opt_logo > select > option[value='show']").prop("selected", true); // select
-           
+
             mes_box.css({
               "display": "flex"
             });
@@ -550,7 +572,7 @@
             })), 2000);
             if (data.message == 'success') {
               $('#form_logo').prepend(tr);
-              mes.html('Insert Successfully.'); 
+              mes.html('Insert Successfully.');
             } else {
               mes.html('Please input file!');
             }
@@ -564,6 +586,7 @@
         var id = tr.find('td:eq(0) p').text();
         var image = tr.find('td:eq(1) img').attr('alt'); // image;
         var status = tr.find('td:eq(2)').text();
+        trInd = tr.index();
         save_logo.hide();
         update_logo.show();
         // asign value 
@@ -602,36 +625,7 @@
             //work before success   
           },
           success: function(data) {
-            var tr =`
-              <tr>
-                <td class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">
-                  <?php echo ($index-$index)+1; ?>
-                  </h6>
-                  <p>
-                  ${edit_id.val()}
-                  </p>
-                </td>
-                <td class="border-bottom-0">
-                  <div style="width: 85px;height: 85px;">
-                    <img style="height: 100%;width: 100%;object-fit: cover;" id="image" src="../assets/img_box/${photo.val()}" alt="${photo.val()}">
-                  </div>
-                </td>
-                <td class="border-bottom-0">
-                  ${status.val()}
-                </td>
-                <td class="border-bottom-0">
-                  <button id="edit" type="button" class="btn btn-primary m-1"><i class="fa-solid fa-file-pen"></i> Edit</button>
-                </td>
-              </tr>`;
-              $('#form_logo').html(tr);
             //work after success     
-            $('#img_box').css({
-              "background-image": "url('../assets/images/backgrounds/icon-img_upload.png')"
-            }); // image
-            $("div#opt_logo > select > option[value='show']").prop("selected", true); // select
-            save_logo.show();
-            update_logo.hide();
             mes_box.css({
               "display": "flex"
             });
@@ -640,12 +634,63 @@
             })), 2000);
             if (data.message == 'updated') {
               mes.html('Update Successfully.');
+              // get data
+              $('#form_logo').find('tr:eq(' + trInd + ') td:eq(1) div img').attr("src", `../assets/img_box/${photo.val()}`);
+              $('#form_logo').find('tr:eq(' + trInd + ') td:eq(1) div img').attr("alt", `${photo.val()}`);
+              $('#form_logo').find('tr:eq(' + trInd + ') td:eq(2)').text(status.val());
+              $('#img_box').css({
+                "background-image": "url('../assets/images/backgrounds/icon-img_upload.png')"
+              }); // image
+              $("div#opt_logo > select > option[value='show']").prop("selected", true); // select
+              save_logo.show();
+              update_logo.hide();
             } else {
               mes.html('Please input file!');
             }
           }
         });
       });
+      // ask delete form
+      var delID;
+      $('#form_logo').on('click', '#ask_delete', function() {
+        $('#delete_ask').modal('show');
+        var tr = $(this).parents('tr');
+        delID = tr.find('td:eq(0) p').text();
+        trInd = tr.index();
+        $('#body_del').html(trInd).css({'color':'red'});
+      });
+      // yes button delete
+      $('#delete_ask').on('click','#yes_delete',function(){
+          $.ajax({
+          url: '../action/delete_logo.php',
+          type: 'POST',
+          data:{ids:delID},
+          // contentType: false,
+          cache: false,
+          // processData: false,
+          dataType: "json",
+          beforeSend: function() {
+            //work before success   
+          },
+          success: function(data) {
+            //work after success     
+            mes_box.css({
+              "display": "flex"
+            });
+            setTimeout(() => (mes_box.css({
+              "display": "none"
+            })), 2000);
+            if (data.message == 'delete') { 
+              $('#form_logo').find('tr:eq('+trInd+')').hide(); // delete tr by id 
+              mes.html('Delete Successfully.');
+            } else {
+              mes.html('file!');
+            }
+          }
+        });
+      });
+       
+
 
 
 

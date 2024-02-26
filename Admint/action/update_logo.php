@@ -7,11 +7,8 @@
     $cn->query($sql);
     if ($cn->query($sql)) {
         $mes['message'] = "updated";
-        // $post_data = $_POST;
-        // $data = array_merge($mes,$post_data);
     }else {
         $mes['message'] = "fail";
-        // $data = array_merge($mes,$post_data);
     }
     echo json_encode($mes);
 ?>
