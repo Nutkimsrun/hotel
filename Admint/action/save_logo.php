@@ -7,6 +7,7 @@
     }else {
         $sql = "INSERT INTO logo VALUES(null,'$image','$status')";
         $con->query($sql);
+        $mes['id'] = $con->insert_id;
         $mes['message'] = "success";
     }
     echo json_encode($mes);
