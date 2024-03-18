@@ -1,9 +1,9 @@
 <?php 
     $cn = new mysqli('localhost','root','','db_hotel');
-    $id = $_POST['edit_id'];
-    $image = $_POST['txt_photo'];
-    $status = $_POST['logo_opt'];
-    $sql = "UPDATE logo SET status ='$status',image='$image' WHERE id='$id'";
+    $id = $_POST['edit_id_menu'];
+    $name = $_POST['name_menu'];
+    $status = $_POST['menu_opt'];
+    $sql = "UPDATE menu SET status ='$status',name='$name' WHERE id='$id'";
     $cn->query($sql);
     if ($cn->query($sql)) {
         $mes['message'] = "updated";

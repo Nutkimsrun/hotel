@@ -4,31 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="index.css">
     <title>Hotel</title>
 </head>
+
 <body>
     <nav class="container" id="navbar">
         <div style="height: 100%;">
-            <?php 
-                $cn = mysqli_connect('localhost','root','','hotel');
-                $sql = "SELECT image,status FROM logo WHERE status='show' ORDER BY id DESC";
-                $rs = mysqli_query($cn,$sql);
-                $row = $rs->fetch_object();
+            <?php
+            $cn = mysqli_connect('localhost', 'root', '', 'db_hotel');
+            $sql = "SELECT image,status FROM logo WHERE status='show' ORDER BY id DESC";
+            $rs = mysqli_query($cn, $sql);
+            $row = $rs->fetch_object();
             ?>
             <img id="image" src="../Admint/assets/img_box/<?php echo $row->image ?>">
         </div>
-        <ul>
+        <!-- <ul>
             <li>
                 <a href="#">Home</a>
             </li>
@@ -111,7 +108,79 @@
                     Contact
                 </a>
             </li>
-        </ul>
+        </ul> -->
+        <!-- // test  -->
+        <?php 
+        $cn = mysqli_connect('localhost', 'root', '', 'db_hotel');
+        $sql1 = "SELECT * FROM menu WHERE status ='show' ORDER BY id DESC";
+        $result1 = $cn->query($sql1);
+        echo "<ul>";
+            foreach ($result1 as $menu)
+            {
+            echo "<li id='drop'>";
+            echo "<a href='#' data-bs-toggle='dropdown' aria-expanded='false'>
+                    <i class='fa-solid fa-angle-down'></i>
+                    $menu[name]
+                </a>";
+                echo "<ul class='dropdown-menu'>";
+                    $menu_title = $menu["name"];
+                    // sub menu
+                    $sql2 = 'SELECT
+                    sub_menu.name
+                    FROM
+                    sub_menu
+                    INNER JOIN menu ON sub_menu.menu_name = menu.name
+                    WHERE 
+                    sub_menu.menu_name = "'.$menu_title.'"';
+                    $result2 = $cn->query($sql2);
+                    foreach ($result2 as $submenu)
+                    {
+                        if ($result2) {
+                            echo "<li>";
+                            echo "<a class='dropdown-item' href='http://localhost/hotel_project/hotel/Admint/html/ui-forms.php' target='_blank'>$submenu[name]</a>";
+                            echo "</li>";
+                        }
+                    }
+                    echo "</ul>";
+                echo "</li>";
+            }
+            echo "</ul>"; 
+            ?>
+        <!-- <ul>
+            <li>
+                <a href="#">Home</a>
+            </li>
+            <li>
+                <a href="#">About Us</a>
+            </li>
+            <li id="drop">
+                <a href="#" data-bs-toggle="dropdown" aria-expanded="false">Room
+                    <i class="fa-solid fa-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            Room Grid Style
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            Room List Style
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            Room Details Style
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    Contact
+                </a>
+            </li>
+        </ul> -->
         <div>
             <ul>
                 <li>
@@ -124,7 +193,7 @@
             </ul>
         </div>
     </nav>
-    <div class="head">
+    <!-- <div class="head">
         <img src="img/hotel.png" alt="" id="top">
         <div id="color"></div>
         <div id="top-1">
@@ -132,6 +201,42 @@
                 <h3>
                     Luxury Hotel <br>
                     With River View
+                </h3>
+            </div>
+            <div id="date">
+                <input type="date">
+                <input type="date">
+                <select name="" id="">
+                    <option value="1">Adults</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                </select>
+                <select name="" id="">
+                    <option value="1">Childrens</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                </select>
+                <div id="ch">
+                    check Availability
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <div class="head">
+        <?php
+            $cn = mysqli_connect('localhost', 'root', '', 'db_hotel');
+            $sql = "SELECT * FROM up_data WHERE type='header' ORDER BY id DESC";
+            $rs = mysqli_query($cn, $sql);
+            $row = $rs->fetch_object();
+        ?>
+        <img src="../Admint/assets/img_box/<?php echo $row->image ?>" alt="" id="top">
+        <!-- <div id="color"></div> -->
+        <div id="top-1">
+            <div>
+                <h3>
+                   <?php echo $row->description; ?>
                 </h3>
             </div>
             <div id="date">
@@ -407,7 +512,7 @@
                         Get Appointment
                     </a>
                 </div>
-                
+
             </div>
             <div class="salon_3">
                 <img src="img/salon.jpg" alt="">
@@ -566,7 +671,7 @@
                     </p>
                 </div>
             </div>
-           
+
         </div>
         <div id="get_an2">
             <img src="img/image-19.jpg" alt="">
@@ -579,7 +684,7 @@
                     Advanced
                 </p>
                 <h1>
-                   <span id="sm_order">$</span>49<span id="sm_order">.99</span>
+                    <span id="sm_order">$</span>49<span id="sm_order">.99</span>
                 </h1>
                 <ul id="order_2" style="margin-top: 20px;">
                     <li>
@@ -632,7 +737,7 @@
                     Basic
                 </p>
                 <h1>
-                   <span id="sm_order">$</span>29<span id="sm_order">.99</span>
+                    <span id="sm_order">$</span>29<span id="sm_order">.99</span>
                 </h1>
                 <ul id="order_2" style="margin-top: 20px;">
                     <li>
@@ -716,7 +821,7 @@
     </section>
     <section id="new_fet">
         <div style="text-align: center;">
-                <img src="img/image-13.png" alt="">
+            <img src="img/image-13.png" alt="">
             <h3 id="ft">
                 News Feeds
             </h3>
@@ -784,17 +889,15 @@
 <script>
     var lasscrollTop = 0;
     navbar = document.querySelector('#navbar');
-    window.addEventListener('scroll', function () {
+    window.addEventListener('scroll', function() {
         var scrollTop = window.pageXOffset || document.documentElement.scrollTop;
         if (scrollTop > lasscrollTop) {
             navbar.style.top = "-80px";
             // $('.dropdown-menu').hide()
-        }
-        else if (scrollTop == 0) {
+        } else if (scrollTop == 0) {
             navbar.style.background = "none";
             // $('.dropdown-menu').show()
-        }
-        else {
+        } else {
             navbar.style.top = "0";
             navbar.style.background = "black";
             // $('.dropdown-menu').show()
@@ -818,6 +921,10 @@
     //         // $('#div1').collapse('hide');
     //     }
     // };
+    $(document).ready(function(){
+        // alert('hello');
+
+    });
 </script>
 
 </html>

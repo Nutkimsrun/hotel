@@ -1,5 +1,5 @@
 <?php
-    $con = new mysqli('localhost','root','','hotel');
+    $con = new mysqli('localhost','root','','db_hotel');
     $image = $_POST['txt_photo'];
     $status = $_POST['logo_opt'];
     if ($image == null || $image == "") {

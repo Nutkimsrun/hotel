@@ -62,11 +62,11 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-card.html" aria-expanded="false">
+              <a class="sidebar-link" href="./ui-card.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-cards"></i>
                 </span>
-                <span class="hide-menu">Card</span>
+                <span class="hide-menu">Content</span>
               </a>
             </li>
             <li class="sidebar-item">
@@ -199,21 +199,27 @@
               <div style="display: flex;gap: 20px;">
                 <div class="card" style="width: 50%;">
                   <div class="card-body">
-                    <!-- <form> -->
-                    <div class="mb-3">
-                      <label for="exampleInputEmail1" class="form-label">Menu & Sub Menu</label>
-                      <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Input menu" aria-describedby="emailHelp">
-                    </div>
-                    <div class="mb-3">
-                      <label for="exampleInputEmail1" class="form-label">Show/Hide</label>
-                      <select class="form-select" aria-label="Default select example">
-                        <option value="2">Show</option>
-                        <option value="1">Hide</option>
-                      </select>
-                    </div>
-                    <button style="float: right;" type="submit" class="btn btn-primary">Save</button>
-                    <button id="subMenu" type="submit" class="btn btn-danger">Add Submenu</button>
-                    <!-- </form> -->
+                    <form method="dialog" class="menu_frm">
+                      <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Menu & Sub Menu</label>
+                        <input type="text" class="form-control" id="name_menu" name="name_menu" placeholder="Input menu" aria-describedby="emailHelp">
+                        <input hidden type="text" id="edit_id_menu" name="edit_id_menu">
+                      </div>
+                      <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Show/Hide</label>
+                        <div id="opt_menu">
+                          <select id="menu_opt" name="menu_opt" class="form-select" aria-label="Default select example">
+                            <option value="show">Show</option>
+                            <option value="hide">Hide</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div style="margin-top: 5rem;">
+                        <button style="float: right;" id="save_menu" class="btn btn-primary"><i class="fa-solid fa-file-import"></i> Save</button>
+                        <button style="float: right;" id="update_menu" class="btn btn-danger"><i class="fa-solid fa-file-import"></i> Update</button>
+                        <button id="subMenu" class="btn btn-danger"><i class="fa-solid fa-plus"></i> Add Submenu</button>
+                      </div>
+                    </form>
                   </div>
                 </div>
                 <div class="card" style="width: 50%;">
@@ -235,8 +241,8 @@
                       </div>
 
                       <div style="float: right;margin-top: 4rem;">
-                        <button name="save_img" id="save_img" class="btn btn-primary">Save</button>
-                        <button name="update_img" id="update_img" class="btn btn-danger">Update</button>
+                        <button name="save_img" id="save_img" class="btn btn-primary"><i class="fa-solid fa-file-import"></i> Save</button>
+                        <button name="update_img" id="update_img" class="btn btn-danger"><i class="fa-solid fa-file-import"></i> Update</button>
                       </div>
                     </form>
                   </div>
@@ -251,43 +257,47 @@
                       <thead class="text-dark fs-4">
                         <tr>
                           <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Id</h6>
-                          </th>
-                          <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Assigned</h6>
+                            <h6 class="fw-semibold mb-0">No</h6>
                           </th>
                           <th class="border-bottom-0">
                             <h6 class="fw-semibold mb-0">Name</h6>
                           </th>
                           <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Priority</h6>
+                            <h6 class="fw-semibold mb-0">Option</h6>
                           </th>
-                          <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Budget</h6>
+                          <th class="border-bottom-0 text-center">
+                            <h6 class="fw-semibold mb-0">Action</h6>
                           </th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                          <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">1</h6>
-                          </td>
-                          <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-1">Sunil Joshi</h6>
-                            <span class="fw-normal">Web Designer</span>
-                          </td>
-                          <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal">Elite Admin</p>
-                          </td>
-                          <td class="border-bottom-0">
-                            <div class="d-flex align-items-center gap-2">
-                              <span class="badge bg-primary rounded-3 fw-semibold">Low</span>
-                            </div>
-                          </td>
-                          <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0 fs-4">$3.9</h6>
-                          </td>
-                        </tr>
+                      <tbody id="view_menu">
+                        <?php
+                        $cn = mysqli_connect('localhost', 'root', '', 'db_hotel');
+                        $sql = "SELECT * FROM menu ORDER BY id DESC";
+                        $rs = $cn->query($sql);
+                        $index = 0;
+                        while ($row = $rs->fetch_array()) {
+                          $index++;
+                        ?>
+                          <tr>
+                            <td class="border-bottom-0">
+                              <h6 class="fw-semibold mb-0"><?php echo $index; ?></h6>
+                              <p hidden class="fw-semibold mb-0"><?php echo $row[0]; ?></p>
+                            </td>
+                            <td class="border-bottom-0">
+                              <?php echo $row[1]; ?>
+                            </td>
+                            <td class="border-bottom-0">
+                              <?php echo $row[2]; ?>
+                            </td>
+                            <td class="border-bottom-0" style="width: 10%;">
+                              <button id="edit" type="button" class="btn btn-primary m-1"><i class="fa-solid fa-file-pen"></i> Edit</button>
+                              <button id="ask_menu" type="button" class="btn btn-danger m-1"><i class="fa-solid fa-trash"></i> Delete</button>
+                            </td>
+                          </tr>
+                        <?php
+                        }
+                        ?>
                       </tbody>
                     </table>
                   </div>
@@ -317,7 +327,7 @@
                       </thead>
                       <tbody id="form_logo">
                         <?php
-                        $cn = mysqli_connect('localhost', 'root', '', 'hotel');
+                        $cn = mysqli_connect('localhost', 'root', '', 'db_hotel');
                         $sql = "SELECT * FROM logo ORDER BY id DESC";
                         $rs = $cn->query($sql);
                         $index = 0;
@@ -368,72 +378,102 @@
             <h5 class="modal-title" id="staticBackdropLabel">Add Sub Menu</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body" style="padding: 15px;">
-            <!-- <form> -->
-            <div>
-              <label for="exampleInputEmail1" class="form-label">Sub Menu</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Input sub menu" aria-describedby="emailHelp">
-            </div>
-            <div>
-              <label for="exampleInputEmail1" class="form-label">Select Menu</label>
-              <select class="form-select" aria-label="Default select example">
-                <option value="2">Home</option>
-                <option value="1">Contact</option>
-              </select>
-            </div>
-            <div>
-              <label for="exampleInputEmail1" class="form-label">Show/Hide</label>
-              <select class="form-select" aria-label="Default select example">
-                <option value="2">Show</option>
-                <option value="1">Hide</option>
-              </select>
-            </div>
-            <!-- </form> -->
+          <div class="modal-body" style="padding: 15px;padding-bottom: 0;">
+            <form method="dialog" class="frm_submenu">
+              <div>
+                <label for="exampleInputEmail1" class="form-label">Sub Menu</label>
+                <input type="text" class="form-control" id="sub_name" name="sub_name" placeholder="Input sub menu" aria-describedby="emailHelp">
+                <input hidden type="text" id="edit_id_sub_menu" name="edit_id_sub_menu">
+              </div>
+              <div>
+                <label for="exampleInputEmail1" class="form-label">Select Menu</label>
+                <div id="opt_selmenu">
+                  <select id="sel_menu" name="sel_menu" class="form-select" aria-label="Default select example">
+                    <?php
+                    $cn = mysqli_connect('localhost', 'root', '', 'db_hotel');
+                    $sql = "SELECT name FROM menu ORDER BY id DESC";
+                    $rs = $cn->query($sql);
+                    $index = 0;
+                    while ($row = $rs->fetch_array()) {
+                      $index++;
+                    ?>
+                      <option value="<?php echo $row['name'] ?>"><?php echo $row['name']; ?></option>
+                    <?php
+                    }
+                    ?>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label for="exampleInputEmail1" class="form-label">Show/Hide</label>
+                <div id="opt_submenu">
+                  <select id="sub_opt" name="sub_opt" class="form-select" aria-label="Default select example">
+                    <option value="show">Show</option>
+                    <option value="hide">Hide</option>
+                  </select>
+                </div>
+              </div>
+              <div class="modal-footer mt-2 mb-2" style="padding: 0 15px;display: flex;justify-content: center;">
+                <button type="button" id="save_sub" class="btn btn-secondary"><i class="fa-solid fa-file-import"></i> Save</button>
+                <button type="button" id="update_sub" class="btn btn-danger"><i class="fa-solid fa-file-import"></i> Update</button>
+              </div>
+            </form>
           </div>
-          <div class="modal-footer" style="padding: 0 15px;display: flex;justify-content: center;">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Save</button>
-          </div>
-          <div class="mb-3" style="padding: 15px;">
+          <div class="mb-3" style="padding: 15px;padding-top: 0;">
             <div class="card w-100">
-              <div class="card-body p-4">
-                <!-- <h5 class="card-title fw-semibold mb-4">View All Sub Menu</h5> -->
+              <div class="card-body p-4" style="padding-top: 0 !important;">
                 <div class="table-responsive">
                   <table class="table text-nowrap mb-0 align-middle">
                     <thead class="text-dark fs-4">
                       <tr>
                         <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Id</h6>
+                          <h6 class="fw-semibold mb-0">No</h6>
                         </th>
                         <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Name</h6>
+                          <h6 class="fw-semibold mb-0">Menu</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Sub Menu</h6>
                         </th>
                         <th class="border-bottom-0">
                           <h6 class="fw-semibold mb-0">Option</h6>
                         </th>
-                        <th class="border-bottom-0">
+                        <th class="border-bottom-0 text-center" style="width: 10%;">
                           <h6 class="fw-semibold mb-0">Action</h6>
                         </th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <td class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">1</h6>
-                        </td>
-                        <td class="border-bottom-0">
-                          <span class="fw-normal">Web Designer</span>
-                        </td>
-                        <td class="border-bottom-0">
-                          <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-primary rounded-3 fw-semibold">Low</span>
-                          </div>
-                        </td>
-                        <td class="border-bottom-0">
-                          <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-primary rounded-3 fw-semibold">Low</span>
-                          </div>
-                        </td>
-                      </tr>
+                    <tbody id="view_sub">
+                      <?php
+                      $cn = mysqli_connect('localhost', 'root', '', 'db_hotel');
+                      $sql = "SELECT * FROM sub_menu ORDER BY id DESC";
+                      $rs = $cn->query($sql);
+                      $index = 0;
+                      while ($row = $rs->fetch_array()) {
+                        $index++;
+                      ?>
+                        <tr>
+                          <td class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0"><?php echo $index; ?></h6>
+                            <p class="fw-semibold mb-0"><?php echo $row[0]; ?></p>
+                          </td>
+                          <td class="border-bottom-0">
+                            <?php echo $row[1]; ?>
+                          </td>
+                          <td class="border-bottom-0">
+                            <?php echo $row[2]; ?>
+                          </td>
+                          <td class="border-bottom-0">
+                            <?php echo $row[3]; ?>
+                          </td>
+                          <td class="border-bottom-0">
+                            <button id="edit_submenu" type="button" class="btn btn-primary m-1"><i class="fa-solid fa-file-pen"></i> Edit</button>
+                            <button id="ask_submenu" type="button" class="btn btn-danger m-1"><i class="fa-solid fa-trash"></i> Delete</button>
+                          </td>
+                        </tr>
+                      <?php
+                      }
+                      ?>
                     </tbody>
                   </table>
                 </div>
@@ -452,7 +492,6 @@
     </div>
     <!-- end -->
     <!-- ask delete  -->
-
     <div class="modal fade" id="delete_ask" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -471,6 +510,44 @@
       </div>
     </div>
     <!-- end  -->
+    <!-- ask delete menu  -->
+    <div class="modal fade" id="delete_menu" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Message</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Do you want delete this record [ <span id="body_delmenu"></span> ]?
+          </div>
+          <div class="modal-footer" style="justify-content: center;">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+            <button type="button" id="yes_menudel" class="btn btn-primary" data-bs-dismiss="modal">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end  -->
+    <!-- ask delete sub menu  -->
+    <div class="modal fade" id="delete_sub_menu" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Message</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Do you want delete this record [ <span id="body_delsub_menu"></span> ]?
+          </div>
+          <div class="modal-footer" style="justify-content: center;">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+            <button type="button" id="yes_sub_menudel" class="btn btn-primary" data-bs-dismiss="modal">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end  -->
 
   </div>
   <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
@@ -484,6 +561,10 @@
       var mes = $('#message');
       var update_logo = $('#update_img').hide();
       var save_logo = $('#save_img');
+      var save_menu = $('#save_menu');
+      var update_menu = $('#update_menu').hide();
+      var save_sub_menu = $('#save_sub');
+      var update_sub_menu = $('#update_sub').hide();
       var trInd = 0;
       // open submenu
       $('#subMenu').click(function() {
@@ -583,7 +664,7 @@
       $('#form_logo').on('click', '#edit', function() {
         // get data from view 
         var tr = $(this).parents('tr');
-        var id = tr.find('td:eq(0) p').text();
+        var id = tr.find('td:eq(0) p').text().trim();
         var image = tr.find('td:eq(1) img').attr('alt'); // image;
         var status = tr.find('td:eq(2)').text();
         trInd = tr.index();
@@ -605,7 +686,7 @@
         mes.html('Selected');
       });
       // update logo
-      update_logo.click(function() {
+      $('#update_img').click(function() {
         var eThis = $(this);
         var Parent = eThis.parents('.upl');
         var photo = Parent.find('#txt_photo');
@@ -641,7 +722,8 @@
               $('#img_box').css({
                 "background-image": "url('../assets/images/backgrounds/icon-img_upload.png')"
               }); // image
-              $("div#opt_logo > select > option[value='show']").prop("selected", true); // select
+              $("div#opt_logo > select > option[value='show']").prop("selected", true); // select 
+              photo.val('');
               save_logo.show();
               update_logo.hide();
             } else {
@@ -650,21 +732,25 @@
           }
         });
       });
-      // ask delete form
+      // ask delete logo
       var delID;
       $('#form_logo').on('click', '#ask_delete', function() {
         $('#delete_ask').modal('show');
         var tr = $(this).parents('tr');
         delID = tr.find('td:eq(0) p').text();
         trInd = tr.index();
-        $('#body_del').html(trInd).css({'color':'red'});
+        $('#body_del').html(trInd).css({
+          'color': 'red'
+        });
       });
       // yes button delete
-      $('#delete_ask').on('click','#yes_delete',function(){
-          $.ajax({
+      $('#delete_ask').on('click', '#yes_delete', function() {
+        $.ajax({
           url: '../action/delete_logo.php',
           type: 'POST',
-          data:{ids:delID},
+          data: {
+            ids: delID
+          },
           // contentType: false,
           cache: false,
           // processData: false,
@@ -680,8 +766,8 @@
             setTimeout(() => (mes_box.css({
               "display": "none"
             })), 2000);
-            if (data.message == 'delete') { 
-              $('#form_logo').find('tr:eq('+trInd+')').hide(); // delete tr by id 
+            if (data.message == 'delete') {
+              $('#form_logo').find('tr:eq(' + trInd + ')').hide(); // delete tr by id 
               mes.html('Delete Successfully.');
             } else {
               mes.html('file!');
@@ -689,7 +775,328 @@
           }
         });
       });
-       
+      // save menu 
+      $('#save_menu').click(function() {
+        var eThis = $(this);
+        var Parent = eThis.parents('.menu_frm');
+        var menu_name = Parent.find('#name_menu');
+        var menu_opt = Parent.find('#menu_opt');
+        // console.log(menu_name.val(),menu_opt.val());
+        var frm = eThis.closest('form.menu_frm');
+        var frm_data = new FormData(frm[0]);
+        $.ajax({
+          url: '../action/save_menu.php',
+          type: 'POST',
+          data: frm_data,
+          contentType: false,
+          cache: false,
+          processData: false,
+          dataType: "json",
+          beforeSend: function() {
+            //work before success   
+          },
+          success: function(data) {
+            mes_box.css({
+              "display": "flex"
+            });
+            setTimeout(() => (mes_box.css({
+              "display": "none"
+            })), 2000);
+            if (data.message == 'success') {
+              mes.html('Insert Successfully.');
+              // get auto id
+              var tr = `
+              <tr>
+                <td class="border-bottom-0">
+                              <h6 class="fw-semibold mb-0"><?php echo $index - $index + 1; ?></h6>
+                              <p class="fw-semibold mb-0">${data.id}</p>
+                            </td>
+                            <td class="border-bottom-0">
+                            ${menu_name.val()}
+                            </td>
+                            <td class="border-bottom-0">
+                            ${menu_opt.val()}
+                            </td>
+                            <td class="border-bottom-0" style="width: 10%;">
+                              <button id="edit" type="button" class="btn btn-primary m-1"><i class="fa-solid fa-file-pen"></i> Edit</button>
+                              <button id="ask_menu" type="button" class="btn btn-danger m-1"><i class="fa-solid fa-trash"></i> Delete</button>
+                            </td>
+              </tr>`;
+              $('#view_menu').prepend(tr);
+              // clear data in form
+              menu_name.val('');
+              $("div#opt_menu > select > option[value='show']").prop("selected", true);
+            } else if (data.message == 'duplicat') {
+              mes.html('Duplicat menu!');
+            } else if (data.message == 'input') {
+              mes.html('Input menu!');
+            } else {
+              mes.html('Insert faild!');
+            }
+          }
+        });
+      });
+      // get edit menu 
+      $('#view_menu').on('click', '#edit', function() {
+        var tr = $(this).parents('tr');
+        var id = tr.find('td:eq(0) p').text().trim();
+        var name = tr.find('td:eq(1)').text().trim();
+        var status = tr.find('td:eq(2)').text();
+        trInd = tr.index();
+        // assign value input
+        $('#edit_id_menu').val(id);
+        $('#name_menu').val(name);
+        $("div#opt_menu > select > option[value=" + status + "]").prop("selected", true);
+        save_menu.hide();
+        update_menu.show();
+        mes_box.css({
+          "display": "flex"
+        });
+        setTimeout(() => (mes_box.css({
+          "display": "none"
+        })), 2000);
+        mes.html('Selected');
+      });
+      // update menu 
+      update_menu.click(function() {
+        var eThis = $(this);
+        var Parent = eThis.parents('.menu_frm');
+        var menu_name = Parent.find('#name_menu');
+        var menu_opt = Parent.find('#menu_opt');
+        // console.log(menu_name,menu_opt);
+        var frm = eThis.closest('form.menu_frm');
+        var frm_data = new FormData(frm[0]);
+        $.ajax({
+          url: '../action/update_menu.php',
+          type: 'POST',
+          data: frm_data,
+          contentType: false,
+          cache: false,
+          processData: false,
+          dataType: "json",
+          beforeSend: function() {
+            //work before success    
+          },
+          success: function(data) {
+            //work after success     
+            // console.log(data.message);
+            mes_box.css({
+              "display": "flex"
+            });
+            setTimeout(() => (mes_box.css({
+              "display": "none"
+            })), 2000);
+            if (data.message == 'updated') {
+              save_menu.show();
+              update_menu.hide();
+              // get auto data
+              $('#view_menu').find('tr:eq(' + trInd + ') td:eq(1)').text(menu_name.val());
+              $('#view_menu').find('tr:eq(' + trInd + ') td:eq(2)').text(menu_opt.val());
+              // clear form
+              menu_name.val('');
+              $("div#opt_menu > select > option[value='show']").prop("selected", true);
+              mes.html('Update Successfully.');
+            } else {
+              mes.html('Update fail!');
+            }
+          }
+        });
+
+      });
+      // ask delete menu
+      $('#view_menu').on('click', '#ask_menu', function() {
+        $('#delete_menu').modal('show');
+        var tr = $(this).parents('tr');
+        delID = tr.find('td:eq(0) p').text();
+        trInd = tr.index();
+        $('#body_delmenu').html(trInd).css({
+          'color': 'red'
+        });
+      });
+      // delete menu
+      $('#delete_menu').on('click', '#yes_menudel', function() {
+        $.ajax({
+          url: '../action/delete_menu.php',
+          type: 'POST',
+          data: {
+            menu_id: delID
+          },
+          // contentType: false,
+          cache: false,
+          // processData: false,
+          dataType: "json",
+          beforeSend: function() {
+            //work before success    
+          },
+          success: function(data) {
+            //work after success      
+            console.log(data.message);
+            $('#view_menu').find('tr:eq(' + trInd + ')').hide();
+          }
+        });
+      });
+      // save sub menu
+      $('#save_sub').click(function() {
+        var eThis = $(this);
+        var Parent = eThis.parents('.frm_submenu');
+        var name = Parent.find('#sub_name');
+        var menu_name = Parent.find('#sel_menu');
+        var status = Parent.find('#sub_opt');
+        var frm = eThis.closest('form.frm_submenu');
+        var frm_data = new FormData(frm[0]);
+        $.ajax({
+          url: '../action/save_sub_menu.php',
+          type: 'POST',
+          data: frm_data,
+          contentType: false,
+          cache: false,
+          processData: false,
+          dataType: "json",
+          beforeSend: function() {
+            //work before success    
+          },
+          success: function(data) {
+            alert(data.message);
+            if (data.message == 'success') {
+              var tr = `
+              <tr>
+                        <td class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0"><?php echo $index - $index + 1; ?></h6>
+                          <p hidden class="fw-semibold mb-0">${data.id}</p>
+                        </td>
+                        <td class="border-bottom-0">
+                          ${menu_name.val()}
+                        </td>
+                        <td class="border-bottom-0">
+                          ${name.val()}
+                        </td>
+                        <td class="border-bottom-0">
+                          ${status.val()}
+                        </td>
+                        <td class="border-bottom-0">
+                          <button id="edit_submenu" type="button" class="btn btn-primary m-1"><i class="fa-solid fa-file-pen"></i> Edit</button>
+                          <button id="ask_submenu" type="button" class="btn btn-danger m-1"><i class="fa-solid fa-trash"></i> Delete</button>
+                        </td>
+                </tr>`;
+              $('#view_sub').prepend(tr);
+              name.val('');
+              $("div#opt_submenu > select > option[value='show']").prop("selected", true);
+            }
+          }
+        });
+      });
+      // get edit sub menu 
+      $('#view_sub').on('click', '#edit_submenu', function() {
+        var tr = $(this).parents('tr');
+        var id = tr.find('td:eq(0) p').text().trim();
+        var name = tr.find('td:eq(1)').text().trim();
+        var name_submenu = tr.find('td:eq(2)').text().trim();
+        var status = tr.find('td:eq(3)').text();
+        trInd = tr.index();
+        // asign value
+        $('#edit_id_sub_menu').val(id)
+        $('#sub_name').val(name_submenu);
+        $("div#opt_selmenu > select > option[value=" + name + "]").prop("selected", true);
+        $("div#opt_submenu > select > option[value=" + status + "]").prop("selected", true);
+        save_sub_menu.hide();
+        update_sub_menu.show();
+      });
+      // update submenu
+      update_sub_menu.click(function() {
+        var eThis = $(this);
+        var Parent = eThis.parents('.frm_submenu');
+        var name = Parent.find('#sub_name');
+        var menu_name = Parent.find('#sel_menu');
+        var status = Parent.find('#sub_opt');
+        var frm = eThis.closest('form.frm_submenu');
+        var frm_data = new FormData(frm[0]);
+        $.ajax({
+          url: '../action/update_sub_menu.php',
+          type: 'POST',
+          data: frm_data,
+          contentType: false,
+          cache: false,
+          processData: false,
+          dataType: "json",
+          beforeSend: function() {
+            //work before success    
+          },
+          success: function(data) {
+            mes_box.css({
+              "display": "flex"
+            });
+            setTimeout(() => (mes_box.css({
+              "display": "none"
+            })), 2000);
+            if (data.message == 'updated') {
+              mes.html('Update Successfully.');
+              alert(data.message);
+              // get auto data
+              $('#view_sub').find('tr:eq(' + trInd + ') td:eq(1)').text(menu_name.val());
+              $('#view_sub').find('tr:eq(' + trInd + ') td:eq(2)').text(name.val());
+              $('#view_sub').find('tr:eq(' + trInd + ') td:eq(3)').text(status.val());
+              save_sub_menu.show();
+              update_sub_menu.hide();
+              // clear data
+              name.val('');
+              $('#edit_id_sub_menu').val('');
+              $("div#opt_submenu > select > option[value='show']").prop("selected", true);
+            } else {
+              // mes.html('Update fail!');
+              alert(data.message);
+            }
+          }
+        });
+      });
+      // ask sub menu 
+      $('#view_sub').on('click', '#ask_submenu', function() {
+        var tr = $(this).parents('tr');
+        $('#delete_sub_menu').modal('show');
+        $('#sub_menu').modal('hide');
+        delID = tr.find('td:eq(0) p').text();
+        trInd = tr.index();
+        $('#body_delsub_menu').html(trInd).css({
+          'color': 'red'
+        });
+      });
+      $('#delete_sub_menu').on('click','#yes_sub_menudel',function(){
+        $.ajax({
+          url: '../action/delete_sub_menu.php',
+          type: 'POST',
+          data: {
+            sub_id: delID
+          },
+          // contentType: false,
+          cache: false,
+          // processData: false,
+          dataType: "json",
+          beforeSend: function() {
+            //work before success    
+          },
+          success: function(data) {
+            //work after success      
+            mes_box.css({
+              "display": "flex"
+            });
+            setTimeout(() => (mes_box.css({
+              "display": "none"
+            })), 2000);
+            if (data.message == 'delete') {
+              mes.html('Delete Successfully.');
+               $('#view_sub').find('tr:eq(' + trInd + ')').hide();
+            }
+          }
+        });
+      });
+
+
+
+
+
+
+
+
+
 
 
 

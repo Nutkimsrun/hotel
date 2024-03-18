@@ -1,7 +1,7 @@
 <?php 
     $cn = new mysqli('localhost','root','','db_hotel');
-    $id = $_POST['ids'];
-    $sql = "DELETE FROM logo WHERE id = '$id' ";
+    $id = $_POST['menu_id'];
+    $sql = "DELETE FROM menu WHERE id = '$id' ";
     $cn->query($sql);
     if ($cn->query($sql)) {
         $mes['message'] = "delete";
