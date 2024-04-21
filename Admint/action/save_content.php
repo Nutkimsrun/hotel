@@ -8,14 +8,25 @@
     $status = $_POST['con_opt'];
     if ($title == null || $title == "" && $img == null || $img == "") {
         $mes['message'] = "input";
-    }else {
+    }
+    else {
         // check duplicate menu
         $sql = "SELECT title FROM up_data WHERE title ='$title'";
         $rs = $con->query($sql);
         $num = $rs->num_rows;
         if ($num >0) {
             $mes['message'] = "duplicat";
-        }else{
+        }
+        // if ($id && !$title) {
+        //     $sql = "UPDATE up_data SET title ='$title', description = '$des',type ='$type',image ='$img',price ='$price', status ='$status' WHERE id='$id'";
+        //     $con->query($sql);
+        //     if ($con->query($sql)) {
+        //         $mes['message'] = "updated";
+        //     }else {
+        //         $mes['message'] = "fail";
+        //     }
+        // }
+        else{
             $sql = "INSERT INTO up_data VALUES(null,'$title','$des','$type','$img','$price','$status')";
             $con->query($sql);
             $mes['id'] = $con->insert_id;

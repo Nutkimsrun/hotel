@@ -46,3 +46,10 @@ input[type='file'] {
     justify-content: center;
     display: none;
 }
+#view_data::-webkit-scrollbar{
+    display: none;
+    scrollbar-width: none;
+}
+#type_loop{
+    color: red !important;
+}

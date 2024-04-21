@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<head> 
+    <?php 
+        $cn = mysqli_connect('localhost', 'root', '', 'db_hotel');
+    ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -11,15 +14,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="index.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <?php
+
+          $sql = "SELECT image,status FROM logo WHERE status='show' ORDER BY id DESC LIMIT 1";
+          $rs = mysqli_query($cn, $sql);
+          $row = $rs->fetch_object();
+          echo "
+            <link rel='shortcut icon' href='../Admint/assets/img_box/$row->image' type='../Admint/assets/img_box/$row->image'>
+          ";
+    ?>
     <title>Hotel</title>
 </head>
-
 <body>
     <nav class="container" id="navbar">
         <div style="height: 100%;">
             <?php
-            $cn = mysqli_connect('localhost', 'root', '', 'db_hotel');
-            $sql = "SELECT image,status FROM logo WHERE status='show' ORDER BY id DESC";
+            $sql = "SELECT image,status FROM logo WHERE status='show' ORDER BY id DESC LIMIT 1";
             $rs = mysqli_query($cn, $sql);
             $row = $rs->fetch_object();
             ?>
@@ -111,8 +123,7 @@
         </ul> -->
         <!-- // test  -->
         <?php 
-        $cn = mysqli_connect('localhost', 'root', '', 'db_hotel');
-        $sql1 = "SELECT * FROM menu WHERE status ='show' ORDER BY id DESC";
+        $sql1 = "SELECT * FROM menu WHERE status ='show'";
         $result1 = $cn->query($sql1);
         echo "<ul>";
             foreach ($result1 as $menu)
@@ -184,12 +195,13 @@
         <div>
             <ul>
                 <li>
-                    <select name="" id="select">
-                        <option value="1">English</option>
+                    <!-- <select name="" id="select">
+                        <option value="1"><a href="http://localhost/hotel_project/hotel/Admint/html/ui-forms.php">login</a></option>
                         <option value="2">Khmer</option>
                         <option value="3">Cambodia</option>
-                    </select>
-                </li>
+                    </select> -->
+                    <a href="../Admint/html/authentication-login.html">login <i class="fa-solid fa-arrow-right-to-bracket"></i></a>
+                </li> 
             </ul>
         </div>
     </nav>
@@ -226,15 +238,17 @@
     </div> -->
     <div class="head">
         <?php
-            $cn = mysqli_connect('localhost', 'root', '', 'db_hotel');
-            $sql = "SELECT * FROM up_data WHERE type='header' ORDER BY id DESC";
+            $sql = "SELECT * FROM up_data WHERE type='header' && status='show' ORDER BY id DESC LIMIT 1";
             $rs = mysqli_query($cn, $sql);
-            $row = $rs->fetch_object();
+            $num = $rs->num_rows;
+            if ($num >0) {
+                $row = $rs->fetch_object();
+            }
         ?>
-        <img src="../Admint/assets/img_box/<?php echo $row->image ?>" alt="" id="top">
-        <!-- <div id="color"></div> -->
+        <img src="../Admint/assets/img_box/<?php echo $row->image ?>" id="top">
+        <div id="color"></div>
         <div id="top-1">
-            <div>
+            <div data-aos="fade-right">
                 <h3>
                    <?php echo $row->description; ?>
                 </h3>
@@ -261,7 +275,7 @@
         </div>
     </div>
     <section id="wel">
-        <div id="wel-1" class="wel-1">
+        <!-- <div id="wel-1" class="wel-1">
             <img src="img/image-13.jpg" alt="">
         </div>
         <div id="wel-1">
@@ -300,6 +314,48 @@
                     </div>
                 </div>
             </div>
+        </div> -->
+        <?php
+            $con = new mysqli('localhost','root','','db_hotel');
+            $sql = "SELECT * FROM up_data WHERE type='welcome' ORDER BY id DESC LIMIT 1";
+            $rs = mysqli_query($con, $sql);
+            $num = $rs->num_rows;
+            if ($num >0) {
+                $row = $rs->fetch_object();
+            }
+        ?>
+        <div id="wel-1" class="wel-1" data-aos="fade-up-right">
+            <img src="../Admint/assets/img_box/<?php echo $row->image; ?>">
+        </div>
+        <div id="wel-1" data-aos="fade-up-left">
+            <div>
+                <img id="bed" src="img/image-2.png">
+            </div>
+            <div>
+                <h3 id="des">
+                    <?php echo $row->title; ?>
+                </h3>
+            </div>
+            <div>
+                <p class="pa">
+                    <?php echo $row->description; ?>
+                </p>
+            </div>
+            <div>
+                <div id="rate">
+                    <h1>4.6</h1>
+                    <div id="rate-1">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <div>
+                        <img src="img/image-14.png" alt="" width="100%">
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
     <section id="featur">
@@ -310,7 +366,7 @@
             </h3>
         </div>
         <div id="ft-1">
-            <div id="ft-2">
+            <!-- <div id="ft-2">
                 <div id="ft-3">
                     <img src="img/wifi.png" alt="" id="ft_img">
                 </div>
@@ -390,7 +446,31 @@
                         Transport Facilities
                     </p>
                 </div>
-            </div>
+            </div> -->
+            <?php 
+                $sql = "SELECT id,title,image,type,status FROM up_data WHERE type='features' && status='show' ORDER BY id DESC";
+                $rs = mysqli_query($cn,$sql);
+                $num = $rs->num_rows;
+                if ($num >0) {
+                    $row = $cn->query($sql);
+                    foreach ($row as $key) {
+                        $photo = $key["image"];
+                        $title = $key["title"];
+                        echo"
+                                <div id='ft-2' data-aos='flip-left'>
+                                <div id='ft-3'>
+                                    <img src='../Admint/assets/img_box/$photo' id='ft_img'>
+                                </div>
+                                <div id='ft-4'>
+                                    <p>
+                                        $title
+                                    </p>
+                                </div>
+                            </div>
+                        ";
+                    }
+                }
+            ?>
         </div>
     </section>
     <section id="our_room">
@@ -405,7 +485,7 @@
             </p>
         </div>
         <div id="our_roombox">
-            <div class="our_roombox1" id="roomBox1">
+            <!-- <div class="our_roombox1" id="roomBox1">
                 <img src="img/image-22.jpg" alt="">
                 <div id="on_our">
                     <div id="on_new">
@@ -484,12 +564,45 @@
                         Family Queen Room
                     </h1>
                 </div>
-            </div>
+            </div> -->
+            <?php 
+                $sql = "SELECT * FROM up_data WHERE type='room' && status='show' ORDER BY id DESC";
+                $rs = mysqli_query($cn,$sql);
+                $num = $rs->num_rows;
+                if ($num >0) {
+                    $row = $cn->query($sql);
+                    foreach ($row as $key) {
+                        $image = $key["image"];
+                        $des = $key["description"];
+                        $price = $key["price"];
+                        $title = $key["title"];
+                        echo "
+                            <div class='our_roombox1' data-aos='zoom-in'>
+                            <img src='../Admint/assets/img_box/$image'>
+                            <div id='on_our'>
+                                <div id='on_new'>
+                                    New
+                                </div>
+                            </div>
+                            <div class='down_our'>
+                                <p>
+                                    $price $ / $des
+                                </p>
+                                <h1>
+                                    $title
+                                </h1>
+                            </div>
+                            </div>
+                        ";
+                    }
+                }
+            ?>
+
         </div>
     </section>
     <section id="salon">
         <div class="salon_1">
-            <div class="salon_2">
+            <!-- <div class="salon_2">
                 <p>
                     Parlour & Salon
                 </p>
@@ -543,7 +656,88 @@
                         Get Appointment
                     </a>
                 </div>
-            </div>
+            </div> -->
+            <?php 
+                $sql = "SELECT * FROM up_data WHERE type='massage' && status='show' ORDER BY id DESC LIMIT 1";
+                $rs = mysqli_query($cn,$sql);
+                $num = $rs->num_rows;
+                if ($num >0) {
+                    $rs = $cn->query($sql);
+                    $row = $rs->fetch_array();
+                    echo "
+                    <div class='salon_2' data-aos='zoom-out-down'>
+                    <p>
+                        Parlour & Salon
+                    </p>
+                    <h3>
+                        $row[1]
+                    </h3>
+                    <p id='salon_p'>
+                        $row[description]
+                    </p>
+                    <p id='opn'>
+                        <i style='margin-right: 10px;' class='fa-regular fa-clock'></i>
+                        Open Daily: 7:00am - 03:00am
+                    </p>
+                    <p id='opn' style='margin-bottom: 1rem;'>
+                        <i style='margin-right: 10px;' class='fa-solid fa-calendar-days'></i>
+                        Sunday: Off day
+                    </p>
+                    <div id='pmen'>
+                        <a href='#'>
+                            Get Appointment
+                        </a>
+                    </div>
+    
+                </div>
+                <div class='salon_3' data-aos='fade-up' data-aos-duration='3000'>
+                    <img src='../Admint/assets/img_box/$row[image]'>
+                </div>
+                    ";  
+                }
+            ?>
+            <?php 
+                $sql = "SELECT * FROM up_data WHERE type='food' && status='show' ORDER BY id DESC LIMIT 1";
+                $rs = mysqli_query($cn,$sql);
+                $num = $rs->num_rows;
+                if ($num >0) {
+                    $rs = $cn->query($sql);
+                    $row = $rs->fetch_array();
+                    echo "
+                    <div class='salon_3' data-aos='fade-down'
+                    data-aos-easing='linear'
+                    data-aos-duration='1500'>
+                        <img src='../Admint/assets/img_box/$row[image]'>
+                    </div>
+                    <div class='salon_2' data-aos='flip-left'
+                    data-aos-easing='ease-out-cubic'
+                    data-aos-duration='2000'>
+                        <p>
+                            Eat & Drinks
+                        </p>
+                        <h3>
+                            $row[title]
+                        </h3>
+                        <p id='salon_p'>
+                            $row[description]
+                        </p>
+                        <p id='opn'>
+                            <i style='margin-right: 10px;' class='fa-regular fa-clock'></i>
+                            Open Daily: 7:00am - 03:00am
+                        </p>
+                        <p id='opn' style='margin-bottom: 1rem;'>
+                            <i style='margin-right: 10px;' class='fa-solid fa-calendar-days'></i>
+                            Sunday: Off day
+                        </p>
+                        <div id='pmen'>
+                            <a href='#'>
+                                Get Appointment
+                            </a>
+                        </div>
+                    </div>
+                    ";  
+                }
+            ?>
         </div>
     </section>
     <section id="supp_row">
@@ -641,7 +835,7 @@
                 A business consulting company that can produce anything. Drive more
                 through digital . We are optimists who love to work together
             </p>
-            <div id="colap" style="margin-top: 40px;" data-bs-toggle="collapse" href="#div1">
+            <!-- <div id="colap" style="margin-top: 40px;" data-bs-toggle="collapse" href="#div1">
                 <span>
                     How do I become an author?
                 </span>
@@ -670,7 +864,34 @@
                         Content marketing is more than a buzzword. It's an important part of your hotel's marketing strategy. Simply put, it's the creation and distribution of valuable assets, such as videos, blog posts, and e-newsletters, as marketing tools.
                     </p>
                 </div>
-            </div>
+            </div> -->
+            <?php 
+                $sql = "SELECT * FROM up_data WHERE type='answer' && status='show' ORDER BY id DESC";
+                $rs = mysqli_query($cn,$sql);
+                $num = $rs->num_rows;
+                if ($num >0) {
+                    $row = $cn->query($sql);
+                    // $row = $rs->fetch_array();
+                    foreach ($row as $key) {
+                        $title = $key["title"];
+                        $des = $key["description"];
+                        $id = $key["id"];
+                             echo "
+                            <div id='colap' data-bs-toggle='collapse' href='#id$id'>
+                            <span>
+                                $title
+                            </span>
+                            <div class='collapse' id='id$id'>
+                                <p id='our_p' style='width: 100%;'>
+                                    $des
+                                </p>
+                            </div>
+                        </div>
+                            ";
+                    }
+               
+                }   
+            ?>
 
         </div>
         <div id="get_an2">
@@ -679,7 +900,9 @@
     </section>
     <section id="plan">
         <div id="plan_1" class="order">
-            <div class="order_1">
+            <div class="order_1" data-aos-delay='500' data-aos="flip-left"
+     data-aos-easing="ease-out-cubic"
+     data-aos-duration="2000">
                 <p>
                     Advanced
                 </p>
@@ -732,7 +955,9 @@
                     </a>
                 </div>
             </div>
-            <div class="order_1">
+            <div class="order_1" data-aos-delay='500' data-aos="flip-left"
+     data-aos-easing="ease-out-cubic"
+     data-aos-duration="2000">
                 <p>
                     Basic
                 </p>
@@ -831,7 +1056,7 @@
             </p>
         </div>
         <div id="new_fet1">
-            <div id="new_fet2">
+            <!-- <div id="new_fet2">
                 <div id="fet_img">
                     <img src="img/news-1.jpg" alt="">
                     <div id="fet_til">
@@ -882,48 +1107,53 @@
                         Excepteur sint occaecat cupida tat non proident, sunt in.
                     </h3>
                 </div>
-            </div>
+            </div> -->
+            <?php 
+                $sql = "SELECT * FROM up_data WHERE type='newfeeds' && status='show' ORDER BY id DESC";
+                $rs = mysqli_query($cn,$sql);
+                $num = $rs->num_rows;
+                if ($num >0) {
+                    $row = $cn->query($sql);
+                    foreach ($row as $key) {
+                        $title = $key["title"];
+                        $des = $key["description"];
+                        $img = $key["image"];
+                        echo "
+                            <div id='new_fet2' data-aos='flip-left' data-aos-delay='500'>
+                                <div id='fet_img'>
+                                    <img src='../Admint/assets/img_box/$img'>
+                                    <div id='fet_til'>
+                                        <p>$title</p>
+                                    </div>
+                                </div>
+                                <div id='fet_txt'>
+                                    <h3>
+                                        $des
+                                    </h3>
+                                </div>
+                            </div> 
+                        ";
+                    }
+                }
+            ?>
         </div>
     </section>
 </body>
 <script>
+    AOS.init();
     var lasscrollTop = 0;
     navbar = document.querySelector('#navbar');
     window.addEventListener('scroll', function() {
         var scrollTop = window.pageXOffset || document.documentElement.scrollTop;
         if (scrollTop > lasscrollTop) {
             navbar.style.top = "-80px";
-            // $('.dropdown-menu').hide()
         } else if (scrollTop == 0) {
             navbar.style.background = "none";
-            // $('.dropdown-menu').show()
         } else {
             navbar.style.top = "0";
             navbar.style.background = "black";
-            // $('.dropdown-menu').show()
         }
         lasscrollTop = scrollTop;
-    });
-    // function opendiv(){
-    //     $('#div1').collapse('hide');
-    //     $('#div2').collapse('hide');
-    //     $('#div3').collapse('hide');
-    //     if ( $('#div1').collapse('show')) {
-    //         // $('#div2').collapse('hide');
-    //         // $('#div3').collapse('hide');
-    //     }
-    //     if ( $('#div2').collapse('show')) {
-    //         // $('#div1').collapse('hide');
-    //         // $('#div3').collapse('hide');
-    //     }
-    //     if ( $('#div3').collapse('show')) {
-    //         // $('#div2').collapse('hide');
-    //         // $('#div1').collapse('hide');
-    //     }
-    // };
-    $(document).ready(function(){
-        // alert('hello');
-
     });
 </script>
 

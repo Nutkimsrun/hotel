@@ -1,4 +1,8 @@
-<!doctype html>
+<?php 
+session_start();
+if (isset($_SESSION['id']) && isset($_SESSION['name'])) {
+  ?>
+    <!doctype html>
 <html lang="en">
 
 <head>
@@ -12,8 +16,7 @@
 
 <body>
   <!--  Body Wrapper -->
-  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-    data-sidebar-position="fixed" data-header-position="fixed">
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
     <!-- Sidebar Start -->
     <aside class="left-sidebar">
       <!-- Sidebar scroll-->
@@ -165,8 +168,7 @@
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
               <a href="https://adminmart.com/product/modernize-free-bootstrap-admin-dashboard/" target="_blank" class="btn btn-primary">Download Free</a>
               <li class="nav-item dropdown">
-                <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
-                  aria-expanded="false">
+                <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
                   <img src="../assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
@@ -197,161 +199,98 @@
           <div class="card">
             <div class="card-body">
               <div class="card">
-                  <div class="card-body">
-                    <form method="dialog" class="con_frm">
-                      <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="title" name="title" placeholder="Input menu" aria-describedby="emailHelp">
-                        <input hidden type="text" id="edit_id" name="edit_id">
+                <div class="card-body">
+                  <form method="dialog" class="con_frm">
+                    <div class="mb-3">
+                      <label for="exampleInputEmail1" class="form-label">Title</label>
+                      <input type="text" class="form-control" id="title" name="title" placeholder="Input menu" aria-describedby="emailHelp">
+                      <input hidden type="text" id="edit_id" name="edit_id">
+                    </div>
+                    <div class="mb-3">
+                      <label for="exampleInputEmail1" class="form-label">Price</label>
+                      <input type="text" class="form-control" id="price" name="price" placeholder="Input menu" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                      <label for="exampleInputEmail1" class="form-label">Description</label>
+                      <textarea class="form-control" style="width: 100%;" name="description" id="description" rows="3" aria-describedby="emailHelp"></textarea>
+                    </div>
+                    <div class="mb-3">
+                      <label for="exampleInputEmail1" class="form-label">Type</label>
+                      <div id="opt_type">
+                        <select id="type" name="type" class="form-select" aria-label="Default select example">
+                          <option value="header">header</option>
+                          <option value="welcome">welcome</option>
+                          <option value="features">features</option>
+                          <option value="room">room</option>
+                          <option value="rate">rate</option>
+                          <option value="answer">answer</option>
+                          <option value="footer">footer</option>
+                          <option value="massage">massage</option>
+                          <option value="food">food</option>
+                          <option value="newfeeds">newfeeds</option>
+                        </select>
                       </div>
-                      <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Price</label>
-                        <input type="text" class="form-control" id="price" name="price" placeholder="Input menu" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                      <label for="exampleInputEmail1" class="form-label">Show/Hide</label>
+                      <div id="opt_sts">
+                        <select id="con_opt" name="con_opt" class="form-select" aria-label="Default select example">
+                          <option value="show">Show</option>
+                          <option value="hide">Hide</option>
+                        </select>
                       </div>
-                      <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Description</label>
-                        <textarea class="form-control" style="width: 100%;" name="description" id="description" rows="3" aria-describedby="emailHelp"></textarea>
+                    </div>
+                    <div class="mt-3">
+                      <div id="img_box">
+                        <input type="file" name="photo_logo" id="img_box1">
                       </div>
-                      <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Type</label>
-                        <div id="opt_type">
-                          <select id="type" name="type" class="form-select" aria-label="Default select example">
-                            <option value="header">header</option>
-                            <option value="welcome">welcome</option>
-                            <option value="features">features</option>
-                            <option value="room">room</option>
-                            <option value="rate">rate</option>
-                            <option value="answer">answer</option>
-                            <option value="footer">footer</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Show/Hide</label>
-                        <div id="opt_logo">
-                          <select id="con_opt" name="con_opt" class="form-select" aria-label="Default select example">
-                            <option value="show">Show</option>
-                            <option value="hide">Hide</option>
-                          </select>
-                        </div>
-                      </div>
-                        <div class="mt-3">
-                          <div id="img_box">
-                            <input type="file" name="photo_logo" id="img_box1">
-                          </div>
-                          <input type="text" name="txt_photo" id="txt_photo">
-                        </div>
-                      <div style="margin-top: 5rem;">
-                        <button style="float: right;" id="save_con" class="btn btn-primary"><i class="fa-solid fa-file-import"></i> Save</button>
-                        <!-- <button style="float: right;" id="update_menu" class="btn btn-danger"><i class="fa-solid fa-file-import"></i> Update</button> -->
-                      </div>
-                    </form>
-                  </div>
+                      <input hidden type="text" name="txt_photo" id="txt_photo">
+                    </div>
+                    <div style="margin-top: 5rem;">
+                      <button style="float: right;" id="save_con" class="btn btn-primary"><i class="fa-solid fa-file-import"></i> Save</button>
+                      <button style="float: right;" id="update_con" class="btn btn-danger"><i class="fa-solid fa-file-import"></i> Update</button>
+                    </div>
+                  </form>
                 </div>
-              <div class="row" id="view_data">
-                <?php 
-                  $cn = mysqli_connect('localhost', 'root', '', 'db_hotel');
-                  $sql = "SELECT * FROM up_data ORDER BY id DESC";
-                  $rs = $cn->query($sql);
-                  while ($row = $rs->fetch_array()) {
-                    ?>
-                      <div class="col-md-4" id="form_content">
-                        <form method="dialog" class="frm_data">
-                      <h5 class="card-title fw-semibold mb-4"><?php echo $row[3]; ?></h5>
-                      <div class="card">
-                        <img style="height: 230px;object-fit: cover;" class="card-img-top" src="../assets/img_box/<?php echo $row[4]; ?>" alt="<?php echo $row[4]; ?>">
-                        <div class="card-body">
-                          <h5 class="card-title"><?php echo $row[1]; ?></h5>
-                          <p class="card-text"><?php echo $row[2]; ?></p>
-                          <a href="#" class="btn btn-primary" id="get_edit">Edit</a>
-                        </div>
-                      </div>
-                      </form>
-                      </div>
-                    <?php
-                  }
-                ?>
-              
-                <!-- <div class="col-md-4">
-                  <h5 class="card-title fw-semibold mb-4">Card</h5>
-                  <div class="card">
-                    <img src="../assets/images/products/s4.jpg" class="card-img-top" alt="...">
-                    <div class="card-body">
-                      <h5 class="card-title">Card title</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                        the
-                        card's content.</p>
-                      <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                  </div>
-                </div> -->
-                <!-- <div class="col-md-4">
-                  <h5 class="card-title fw-semibold mb-4">Card</h5>
-                  <div class="card">
-                    <img src="../assets/images/products/s4.jpg" class="card-img-top" alt="...">
-                    <div class="card-body">
-                      <h5 class="card-title">Card title</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                        the
-                        card's content.</p>
-                      <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                  </div>
-                </div> -->
-                <!-- <div class="col-md-4">
-                  <h5 class="card-title fw-semibold mb-4">Card</h5>
-                  <div class="card">
-                    <img src="../assets/images/products/s4.jpg" class="card-img-top" alt="...">
-                    <div class="card-body">
-                      <h5 class="card-title">Card title</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                        the
-                        card's content.</p>
-                      <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                  </div>
-                </div> -->
-                <!-- <div class="col-md-4">
-                  <h5 class="card-title fw-semibold mb-4">Header and footer</h5>
-                  <div class="card">
-                    <div class="card-header">
-                      Featured
-                    </div>
-                    <div class="card-body">
-                      <h5 class="card-title">Special title treatment</h5>
-                      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                      <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <h5 class="card-title fw-semibold mb-4">Titles, text, and links</h5>
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">Card title</h5>
-                      <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                        the
-                        card's content.</p>
-                      <a href="#" class="card-link">Card link</a>
-                      <a href="#" class="card-link">Another link</a>
-                    </div>
-                  </div>
-                </div> -->
               </div>
+              <div class="row" id="view_data" style="overflow-y: scroll;scroll-behavior: smooth;height: 500px;"></div>
+              <!--  loop with php   -->
+              <!-- test  -->
             </div>
           </div>
         </div>
       </div>
     </div>
-     <!-- message  -->
-     <div id="myModal">
+    <!-- message  -->
+    <div id="myModal">
       <div class="lskymodal-content">
         <p id="message" style="margin-bottom: 0;">
         </p>
       </div>
     </div>
     <!-- end -->
+    <!-- ass delete  -->
+    <div class="modal fade" id="ass_delete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Message</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Do you want delete this record [ <span id="body_delete"></span> ]?
+          </div>
+          <div class="modal-footer" style="justify-content: center;">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+            <button type="button" id="yes_delete" class="btn btn-primary" data-bs-dismiss="modal">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end delete  -->
+
+
+
   </div>
   <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
   <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -359,12 +298,15 @@
   <script src="../assets/js/app.min.js"></script>
   <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
   <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
       var mes_box = $('#myModal');
       var mes = $('#message');
-      var dataInd =0;
+      var save = $('#save_con');
+      var update = $('#update_con').hide();
+      var dataInd = 0;
+      var editID;
       // upload image 
-      $('#img_box').change(function(){
+      $('#img_box').change(function() {
         var eThis = $(this);
         var frm = eThis.closest('form.con_frm');
         var frm_data = new FormData(frm[0]);
@@ -415,16 +357,22 @@
             // get auto data
             var autoData = `
                       <div class="col-md-4" id="form_content">
-                      <h5 class="card-title fw-semibold mb-4">${type.val()}</h5>
+                    <form method="dialog" class="frm_data">
+                      <p id="loopID" hidden>${data.id}</p>
+                      <h5 class="card-title fw-semibold mb-4" id="type_loop">${type.val()}</h5>
                       <div class="card">
-                        <img style="height: 230px;object-fit: cover;" class="card-img-top" src="../assets/img_box/${img.val()}" alt="${img.val()}">
+                      <img style="height: 230px;object-fit: cover;" id="img_loop" class="card-img-top" src="../assets/img_box/${img.val()}" alt="${img.val()}">
                         <div class="card-body">
-                          <h5 class="card-title">${title.val()}</h5>
-                          <p class="card-text">${des.val()}</p>
-                          <a href="#" class="btn btn-primary" id="get_edit">Edit</a>
+                          <h5 class="card-title" id="title_loop">${title.val()}</h5>
+                          <p class="card-text" id="des_loop">${des.val()}</p>
+                          <p class="card-text" id="sts_loop">${status.val()}</p>
+                          <p class="card-text" id="price_loop">${price.val()}</p>
+                          <button type="button" class="btn btn-primary" id="get_edit">Edit</button>
+                          <button style="float: right;" type="button" class="btn btn-danger" id="get_delete">Delete</button>
                         </div>
                       </div>
-                      </div>`;
+                    </form>
+                  </div>`;
             img.val('');
             title.val('');
             des.val('');
@@ -443,28 +391,169 @@
             if (data.message == 'success') {
               $('#view_data').prepend(autoData);
               mes.html('Insert Successfully.');
-            } 
-            else if(data.message == 'duplicat'){
+            } else if (data.message == 'duplicat') {
               mes.html('Dublicate title!');
-            }
-            else {
+            } else {
               mes.html('Please input file!');
             }
           }
         });
       });
-      $('#view_data').on('click','#get_edit',function(){
+      // get edit data
+      $('#view_data').on('click', '#get_edit', function() {
         var eThis = $(this);
         var ind = eThis.parents('#form_content');
         dataInd = ind.index();
-        console.log(dataInd);
-        ind.css({"background-color":"#48cae4"});
-        setTimeout(() => (ind.css({
-              "background-color": "white"
-            })), 2000);
+        editID = ind.find('#loopID').text().trim();
+        var type = ind.find('#type_loop').text().trim();
+        var img = ind.find('#img_loop').attr('alt');
+        var title = ind.find('#title_loop').text().trim();
+        var des = ind.find('#des_loop').text().trim();
+        var price = ind.find('#price_loop').text().trim();
+        var sts = ind.find('#sts_loop').text().trim();
+        $('#edit_id').val(editID);
+        $('#title').val(title);
+        $('#price').val(price);
+        $('#description').val(des);
+        $("div#opt_sts > select > option[value=" + sts + "]").prop("selected", true); // option
+        $("div#opt_type > select > option[value=" + type + "]").prop("selected", true); // option
+        // img 
+        $('#img_box').css({
+          "background-image": "url(../assets/img_box/" + img + ")"
+        });
+        $('#txt_photo').val(img);
+        // setTimeout(() => (ind.css({
+        //       "background-color": "white"
+        //     })), 2000);
+        // message block
+        save.hide();
+        update.show();
+        mes_box.css({
+          "display": "flex"
+        });
+        setTimeout(() => (mes_box.css({
+          "display": "none"
+        })), 2000);
+        mes.html('Selected.');
       });
+      // update data
+      update.on('click', function() {
+        var eThis = $(this);
+        var Parent = eThis.parents('.con_frm');
+        var id = Parent.find('#edit_id');
+        var title = Parent.find('#title');
+        var des = Parent.find('#description');
+        var type = Parent.find('#type');
+        var img = Parent.find('#txt_photo');
+        var price = Parent.find('#price');
+        var status = Parent.find('#con_opt');
+        var frm = eThis.closest('form.con_frm');
+        var frm_data = new FormData(frm[0]);
+        $.ajax({
+          url: '../action/update_content.php',
+          type: 'POST',
+          data: frm_data,
+          contentType: false,
+          cache: false,
+          processData: false,
+          dataType: "json",
+          beforeSend: function() {
+            //work before success   
+          },
+          success: function(data) {
+            getcontent();
+            id.val('');
+            title.val('');
+            des.val('');
+            img.val('');
+            price.val('');
+            save.show();
+            update.hide();
+            $('#img_box').css({
+              "background-image": "url('../assets/images/backgrounds/icon-img_upload.png')"
+            });
+            $("div#opt_sts > select > option[value='show']").prop("selected", true); // select
+            mes_box.css({
+              "display": "flex"
+            });
+            setTimeout(() => (mes_box.css({
+              "display": "none"
+            })), 2000);
+            mes.html('Updated.');
+          }
+        });
+      });
+      getcontent();
+
+      function getcontent() {
+        $.ajax({
+          url: "../action/get_content.php",
+          method: "POST",
+          success: function(data) {
+            $("#view_data").html(data);
+          }
+        });
+      };
+      // ass delete 
+      $('#view_data').on('click', '#get_delete', function() {
+        var eThis = $(this);
+        var ind = eThis.parents('#form_content');
+        dataInd = ind.index();
+        editID = ind.find('#loopID').text().trim();
+        $('#ass_delete').modal('show');
+        $('#body_delete').html(dataInd);
+        $('#body_delete').css({
+          'color': 'red'
+        });
+        console.log(editID);
+      });
+      // delete form 
+      $('#ass_delete').on('click', '#yes_delete', function() {
+        $.ajax({
+          url: '../action/delete_content.php',
+          type: 'POST',
+          data: {
+            ids: editID
+          },
+          // contentType: false,
+          cache: false,
+          // processData: false,
+          dataType: "json",
+          beforeSend: function() {
+            //work before success   
+          },
+          success: function(data) {
+            // console.log(data);
+            //work after success     
+            mes_box.css({
+              "display": "flex"
+            });
+            setTimeout(() => (mes_box.css({
+              "display": "none"
+            })), 2000);
+            if (data.message == 'delete') {
+              getcontent();
+              mes.html('Delete Successfully.');
+            } else {
+              mes.html('file!');
+            }
+          }
+        });
+      });
+
+
+
+
+
+
     });
   </script>
 </body>
 
 </html>
+  <?php
+}else {
+  header("Location:../html/authentication-login.php");
+  exit();
+}
+?>
