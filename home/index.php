@@ -1,10 +1,9 @@
+<?php 
+        $cn = mysqli_connect('localhost', 'root', '', 'db_hotel');
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head> 
-    <?php 
-        $cn = mysqli_connect('localhost', 'root', '', 'db_hotel');
-    ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -20,10 +19,13 @@
 
           $sql = "SELECT image,status FROM logo WHERE status='show' ORDER BY id DESC LIMIT 1";
           $rs = mysqli_query($cn, $sql);
-          $row = $rs->fetch_object();
-          echo "
-            <link rel='shortcut icon' href='../Admint/assets/img_box/$row->image' type='../Admint/assets/img_box/$row->image'>
-          ";
+          $num = $rs->num_rows;
+          if ($num >0) {
+              $row = $rs->fetch_object();
+               echo "
+                <link rel='shortcut icon' href='../Admint/assets/img_box/$row->image' type='../Admint/assets/img_box/$row->image'>
+                ";
+          }
     ?>
     <title>Hotel</title>
 </head>
@@ -33,9 +35,13 @@
             <?php
             $sql = "SELECT image,status FROM logo WHERE status='show' ORDER BY id DESC LIMIT 1";
             $rs = mysqli_query($cn, $sql);
-            $row = $rs->fetch_object();
+            $num = $rs->num_rows;
+            if ($num >0) {
+                $row = $rs->fetch_object();
+                $photo = $row->image;
+                echo "<img id='image' src='../Admint/assets/img_box/$photo'>";
+            }
             ?>
-            <img id="image" src="../Admint/assets/img_box/<?php echo $row->image ?>">
         </div>
         <!-- <ul>
             <li>
@@ -148,7 +154,7 @@
                     {
                         if ($result2) {
                             echo "<li>";
-                            echo "<a class='dropdown-item' href='http://localhost/hotel_project/hotel/Admint/html/ui-forms.php' target='_blank'>$submenu[name]</a>";
+                            echo "<a class='dropdown-item' href='#'>$submenu[name]</a>";
                             echo "</li>";
                         }
                     }
@@ -200,8 +206,11 @@
                         <option value="2">Khmer</option>
                         <option value="3">Cambodia</option>
                     </select> -->
-                    <a href="../Admint/html/authentication-login.php">login <i class="fa-solid fa-arrow-right-to-bracket"></i></a>
+                    <a href="../Admint/html/authentication-login.php" target="_blank">login <i class="fa-solid fa-arrow-right-to-bracket"></i></a>
                 </li> 
+                <li>
+                <a href="../Admint/html/authentication-register.php" target="_blank">Sign Up <i class="fa-solid fa-user-plus"></i></a>
+                </li>
             </ul>
         </div>
     </nav>
