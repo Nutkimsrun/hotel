@@ -92,7 +92,7 @@
         })), 2000);
         mes.html(data.message);
             if (data.message == "success") {
-              var url = "ui-card.php";
+              var url = "authentication-login.php";
               window.location = url; 
             }
           }
